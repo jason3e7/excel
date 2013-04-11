@@ -10,8 +10,9 @@ $threshold = $argv[4];
 
 gc_enable();
 
-require_once("Classes/PHPExcel.php");
+require_once 'Classes/PHPExcel.php';
 require_once 'Classes/PHPExcel/IOFactory.php';
+require_once 'Spreadsheet/Excel/Writer.php'; 
 $reader = PHPExcel_IOFactory::createReader('Excel5');
 
 echo("Read geneAssociation file\n");
@@ -49,7 +50,7 @@ for ($row = 2; $row <= $highestRow; $row++) {
 	if ($row % 1000 === 0) {
 		echo($row . "Lines Complete\n");
 	}
-	if ($geneAssociationSheet->getCellByColumnAndRow(1, $row)->getValue() !== 'C') {
+	if ($geneAssociationSheet->getCellByColumnAndRow(1, $row)->getValue() !== $filterClass) {
 		continue;
 	}
 	$GO_ID = $geneAssociationSheet->getCellByColumnAndRow(0, $row)->getValue();
@@ -75,23 +76,21 @@ unset($geneAssociationExcel);
 unset($geneAssociationSheet);
 gc_collect_cycles();
 echo("Memory usage:" . memory_get_usage() . "\n");
-$objPHPExcel = new PHPExcel();
 
-$objPHPExcel->getProperties()->setCreator("jason3e7")//作者
-   ->setLastModifiedBy("測試修改者")//最後修改者
-   ->setTitle("測試標題")//標題
-   ->setSubject("測試主旨")//主旨
-   ->setDescription("測試註解")//註解
-   ->setKeywords("測試標記")//標記
-   ->setCategory("測試類別");//類別
+$filename = "Report_".time().".xls";
+$excelOutput = new Spreadsheet_Excel_Writer('output/'.$filename);
+$excelOutput->setVersion(8); 
 
-$objPHPExcel->setActiveSheetIndex(0);
-$excel_line = 1;
+$worksheet =& $excelOutput->addWorksheet('0');
+$worksheet->setInputEncoding('utf-8');
 
-$objPHPExcel->getActiveSheet()->setCellValue("A{$excel_line}", 'GO:ID');
-$objPHPExcel->getActiveSheet()->setCellValue("B{$excel_line}", 'GeneName');
+$excel_line = 0;
+
+$worksheet->write($excel_line, 0, 'GO:ID');
+$worksheet->write($excel_line, 1, 'GeneName');
+
 for ($column = 1; $column <= 80; $column++) {
-	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($column + 1, $excel_line, $mappingArray['GeneName'][$column]);
+	$worksheet->write($excel_line, $column + 1, $mappingArray['GeneName'][$column]);
 }
 $excel_line++;
 
@@ -99,11 +98,11 @@ echo("Create output table\n");
 foreach ($sourceArray as $key => $GO_ID) {
 	if ($GO_ID['count'] >= intval($threshold)) {
 		foreach ($GO_ID as $Gene_Name => $value) {
-			if ($Gene_Name != 'count') {	
-				$objPHPExcel->getActiveSheet()->setCellValue("A{$excel_line}", $key);
-				$objPHPExcel->getActiveSheet()->setCellValue("B{$excel_line}", $Gene_Name);
+			if ($Gene_Name != 'count') {
+				$worksheet->write($excel_line, 0, $key);
+				$worksheet->write($excel_line, 1, $Gene_Name);	
 				for ($column = 1; $column <= 80; $column++) {
-					$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($column + 1, $excel_line, $mappingArray[$Gene_Name][$column]);
+					$worksheet->write($excel_line, $column + 1, $mappingArray[$Gene_Name][$column]);	
 				}
 				$excel_line++;
 				
@@ -120,12 +119,8 @@ unset($sourceArray);
 unset($mappingArray);
 gc_collect_cycles();
 echo("Memory usage:" . memory_get_usage() . "\n");
-//Excel檔名
-$filename = "Report_".time().".xls";
 
-//Excel下載檔
-$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');//2003格式
 echo("Write output\n");
-$objWriter->save('output/'.$filename);
+$excelOutput->close(); 
 echo("Write output Done\n");
 ?>
