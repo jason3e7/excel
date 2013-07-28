@@ -19,10 +19,11 @@
 //
 // $Id: Root.php 322720 2012-01-25 12:56:57Z clockwerx $
 
-if (!function_exists("_pear_call_destructors()")) {
-    require_once 'Classes/PEAR/PEAR.php';
-}
-require_once 'Classes/OLE/PPS.php';
+define('__ROOT__', dirname(dirname(__FILE__))); 
+define('DS', DIRECTORY_SEPARATOR);
+
+require_once __ROOT__.DS.'OLE'.DS.'PPS.php';
+require_once __ROOT__.DS.'PEAR'.DS.'System.php';
 
 /**
 * Class for creating Root PPS's for OLE containers

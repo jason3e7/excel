@@ -30,11 +30,11 @@
 *    License along with this library; if not, write to the Free Software
 *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
+define('__ROOT__', dirname(dirname(dirname(__FILE__)))); 
+define('DS', DIRECTORY_SEPARATOR);
 
-if (!function_exists("_pear_call_destructors()")) {
-    require_once 'Classes/PEAR/PEAR.php';
-}
-require_once 'Classes/Spreadsheet/Excel/Writer/Workbook.php';
+require_once __ROOT__.DS.'PEAR'.DS.'PEAR.php';
+require_once __ROOT__.DS.'Spreadsheet'.DS.'Excel'.DS.'Writer'.DS.'Workbook.php';
 
 /**
 * Class for writing Excel Spreadsheets. This class should change COMPLETELY.

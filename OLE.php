@@ -30,7 +30,10 @@ define('OLE_DATA_SIZE_SMALL', 0x1000);
 define('OLE_LONG_INT_SIZE',        4);
 define('OLE_PPS_SIZE',          0x80);
 
-require_once 'PEAR/PEAR.php';
+define('__ROOT__', __FILE__); 
+define('DS', DIRECTORY_SEPARATOR);
+
+require_once __ROOT__.DS.'PEAR'.DS.'PEAR.php';
 
 /**
 * Array for storing OLE instances that are accessed from

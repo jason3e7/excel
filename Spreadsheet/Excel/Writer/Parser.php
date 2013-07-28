@@ -97,9 +97,10 @@ define('SPREADSHEET_EXCEL_WRITER_NE', "<>");
 */
 define('SPREADSHEET_EXCEL_WRITER_CONCAT', "&");
 
-if (!function_exists("_pear_call_destructors()")) {
-    require_once 'Classes/PEAR/PEAR.php';
-}
+define('__ROOT__', dirname(dirname(dirname(__FILE__)))); 
+define('DS', DIRECTORY_SEPARATOR);
+
+require_once __ROOT__.DS.'PEAR'.DS.'PEAR.php';
 
 /**
 * Class for parsing Excel formulas

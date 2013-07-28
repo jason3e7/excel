@@ -17,10 +17,7 @@
 /**
  * base class
  */
-
-if (!function_exists("_pear_call_destructors()")) {
-    require_once 'Classes/PEAR/PEAR.php';
-}
+require_once 'PEAR.php';
 //require_once 'Console/Getopt.php';
 
 $GLOBALS['_System_temp_files'] = array();

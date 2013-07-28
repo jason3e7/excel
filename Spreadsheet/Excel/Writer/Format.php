@@ -31,10 +31,10 @@
 *    License along with this library; if not, write to the Free Software
 *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
+define('__ROOT__', dirname(dirname(dirname(__FILE__)))); 
+define('DS', DIRECTORY_SEPARATOR);
 
-if (!function_exists("_pear_call_destructors()")) {
-    require_once 'Classes/PEAR/PEAR.php';
-}
+require_once __ROOT__.DS.'PEAR'.DS.'PEAR.php';
 
 /**
 * Class for generating Excel XF records (formats)

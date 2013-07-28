@@ -32,9 +32,10 @@
 *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-if (!function_exists("_pear_call_destructors()")) {
-    require_once 'Classes/PEAR/PEAR.php';
-}
+define('__ROOT__', dirname(dirname(dirname(__FILE__)))); 
+define('DS', DIRECTORY_SEPARATOR);
+
+require_once __ROOT__.DS.'PEAR'.DS.'PEAR.php';
 
 /**
 * Class for writing Excel BIFF records.

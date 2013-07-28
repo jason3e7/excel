@@ -19,10 +19,12 @@
 //
 // $Id: File.php 252097 2008-02-02 21:00:37Z schmidt $
 
-require_once 'Classes/OLE/PPS.php';
-require_once 'Classes/PEAR/System.php';
+define('__ROOT__', dirname(dirname(dirname(__FILE__)))); 
+define('DS', DIRECTORY_SEPARATOR);
 
-//exit();
+require_once __ROOT__.DS.'OLE'.DS.'PPS.php';
+require_once __ROOT__.DS.'PEAR'.DS.'System.php';
+
 /**
 * Class for creating File PPS's for OLE containers
 *

@@ -10,9 +10,10 @@ $threshold = $argv[4];
 
 gc_enable();
 
+date_default_timezone_set("Asia/Taipei");
 require_once 'Classes/PHPExcel.php';
 require_once 'Classes/PHPExcel/IOFactory.php';
-require_once 'Classes/Spreadsheet/Excel/Writer.php'; 
+require_once 'Spreadsheet/Excel/Writer.php'; 
 $reader = PHPExcel_IOFactory::createReader('Excel5');
 
 echo("Read geneAssociation file\n");
@@ -77,8 +78,8 @@ unset($geneAssociationSheet);
 gc_collect_cycles();
 echo("Memory usage:" . memory_get_usage() . "\n");
 
-$filename = "Report_".time().".xls";
-$excelOutput = new Spreadsheet_Excel_Writer(dirname(__FILE__).$filename);
+$filename = "Report_exist_".time().".xls";
+$excelOutput = new Spreadsheet_Excel_Writer($filename);
 $excelOutput->setVersion(8); 
 
 $worksheet =& $excelOutput->addWorksheet('0');
@@ -94,7 +95,7 @@ for ($column = 1; $column <= 80; $column++) {
 }
 $excel_line++;
 
-echo("Create output table\n");
+echo("Create exist output table\n");
 foreach ($sourceArray as $key => $GO_ID) {
 	if ($GO_ID['count'] >= intval($threshold)) {
 		foreach ($GO_ID as $Gene_Name => $value) {
@@ -103,6 +104,44 @@ foreach ($sourceArray as $key => $GO_ID) {
 				$worksheet->write($excel_line, 1, $Gene_Name);	
 				for ($column = 1; $column <= 80; $column++) {
 					$worksheet->write($excel_line, $column + 1, $mappingArray[$Gene_Name][$column]);	
+				}
+				$excel_line++;
+				
+				if ($excel_line % 1000 === 0) {
+					echo($excel_line . "Lines Complete\n");
+				}
+			}
+		}
+	}
+}
+echo("Create exist output table Done\n");
+
+$filename = "Report_empty_".time().".xls";
+$excelOutputEmpty = new Spreadsheet_Excel_Writer($filename);
+$excelOutputEmpty->setVersion(8); 
+
+$worksheetEmpty =& $excelOutputEmpty->addWorksheet('0');
+$worksheetEmpty->setInputEncoding('utf-8');
+
+$excel_line = 0;
+
+$worksheetEmpty->write($excel_line, 0, 'GO:ID');
+$worksheetEmpty->write($excel_line, 1, 'GeneName');
+
+for ($column = 1; $column <= 80; $column++) {
+	$worksheetEmpty->write($excel_line, $column + 1, $mappingArray['GeneName'][$column]);
+}
+$excel_line++;
+
+echo("Create output table\n");
+foreach ($sourceArray as $key => $GO_ID) {
+	if ($GO_ID['count'] >= intval($threshold)) {
+		foreach ($GO_ID as $Gene_Name => $value) {
+			if ($Gene_Name != 'count') {
+				$worksheetEmpty->write($excel_line, 0, $key);
+				$worksheetEmpty->write($excel_line, 1, $Gene_Name);	
+				for ($column = 1; $column <= 80; $column++) {
+					$worksheetEmpty->write($excel_line, $column + 1, $mappingArray[$Gene_Name][$column]);	
 				}
 				$excel_line++;
 				
