@@ -12,7 +12,7 @@ gc_enable();
 
 require_once 'Classes/PHPExcel.php';
 require_once 'Classes/PHPExcel/IOFactory.php';
-require_once 'Spreadsheet/Excel/Writer.php'; 
+require_once 'Classes/Spreadsheet/Excel/Writer.php'; 
 $reader = PHPExcel_IOFactory::createReader('Excel5');
 
 echo("Read geneAssociation file\n");
@@ -78,7 +78,7 @@ gc_collect_cycles();
 echo("Memory usage:" . memory_get_usage() . "\n");
 
 $filename = "Report_".time().".xls";
-$excelOutput = new Spreadsheet_Excel_Writer('output/'.$filename);
+$excelOutput = new Spreadsheet_Excel_Writer(dirname(__FILE__).$filename);
 $excelOutput->setVersion(8); 
 
 $worksheet =& $excelOutput->addWorksheet('0');

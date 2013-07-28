@@ -1,0 +1,10 @@
+At windows XP
+use 
+php-5.3.26-Win32-VC9-x86
+PEAR-1.9.4
+
+Set
+php memery config limit
+allow_call_time_pass_reference to true in your php.ini
+
+time zone
