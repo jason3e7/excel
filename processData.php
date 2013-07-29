@@ -60,14 +60,14 @@ for ($row = 2; $row <= $highestRow; $row++) {
 	if(isset($mappingArray[$Gene_Name][0]) === false) {
 		continue;
 	}
-
-	if (isset($sourceArray[$Gene_Name][$GO_ID]) === false) {
-		$sourceArray[$Gene_Name][$GO_ID] = true;
 	
-		if (isset($sourceArray[$Gene_Name]['count'])) {
-			$sourceArray[$Gene_Name]['count']++;		
+	if (isset($sourceArray[$GO_ID][$Gene_Name]) === false) {
+		$sourceArray[$GO_ID][$Gene_Name] = true;
+		$mappingArray[$Gene_Name]['exist'] = true;
+		if (isset($sourceArray[$GO_ID]['count'])) {
+			$sourceArray[$GO_ID]['count']++;		
 		} else {
-			$sourceArray[$Gene_Name]['count'] = 1;	
+			$sourceArray[$GO_ID]['count'] = 1;	
 		}	
 	}
 }
@@ -104,14 +104,14 @@ $excel_line++;
 
 echo("Create exist output table\n");
 // exist table
-foreach ($sourceArray as $key => $Gene_Name) {
-	if ($Gene_Name['count'] >= intval($threshold)) {
-		foreach ($Gene_Name as $GO_ID => $value) {
-			if ($GO_ID != 'count') {
+foreach ($sourceArray as $key => $GO_ID) {
+	if ($GO_ID['count'] >= intval($threshold)) {
+		foreach ($GO_ID as $Gene_Name => $value) {
+			if ($Gene_Name != 'count') {
 				$worksheet->write($excel_line, 0, $key);
-				$worksheet->write($excel_line, 1, $GO_ID);	
+				$worksheet->write($excel_line, 1, $Gene_Name);	
 				for ($column = 1; $column <= 80; $column++) {
-					$worksheet->write($excel_line, $column + 1, $mappingArray[$key][$column]);	
+					$worksheet->write($excel_line, $column + 1, $mappingArray[$Gene_Name][$column]);	
 				}
 				$excel_line++;
 				
@@ -128,7 +128,7 @@ foreach ($mappingArray as $key => $Gene_Name) {
 	if ($key === 'GeneName') {
 		continue;
 	}
-	if (isset($sourceArray[$key]) === false) {
+	if (isset($mappingArray[$key]['exist']) === false) {
 		$worksheetEmpty->write($excel_line, 0, $key);
 		for ($column = 1; $column <= 80; $column++) {
 			$worksheetEmpty->write($excel_line, $column + 1, $mappingArray[$key][$column]);	
